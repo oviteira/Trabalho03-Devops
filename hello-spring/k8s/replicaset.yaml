@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: hello-rs
+  labels: { app: hello }
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: hello,  tier: rs }
+  template:
+    metadata:
+      labels: { app: hello-rs, tier: rs }
+    spec:
+      containers:
+        - name: hello
+          image: oviteira/hello-spring:1.0.1
+          ports: [ { containerPort: 8080 } ]

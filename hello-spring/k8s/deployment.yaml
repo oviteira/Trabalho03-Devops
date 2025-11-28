@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-deployment
+  labels: { app: hello}
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: hello, tier: web }
+  template:
+    metadata:
+      labels: { app: hello, tier: web }
+    spec:
+      containers:
+        - name: hello
+          image: oviteira/hello-spring:1.0.1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet: { path: /hello, port: 8080 }
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet: { path: /hello, port: 8080 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
